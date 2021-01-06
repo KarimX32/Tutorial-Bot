@@ -9,5 +9,6 @@ module.exports.run = async (Client, message, args, prefix) => {
 }
 
 module.exports.help = {
-    name: `hello`
+    name: `hello`,
+    aliases: ["hey", "hi"]
 };

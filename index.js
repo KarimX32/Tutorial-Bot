@@ -19,12 +19,12 @@ const xpfile = require('./xp.json');
 //define a prefix
 const prefix = ('=');
 
+// it creates a new function for our aliases
+Client.aliases = new Discord.Collection();
 
 
 
-
-
-// Command Handler
+// Commands Handler 
 
 // get into the cmds folder
 fs.readdirSync('./commands/').forEach(dir => {
@@ -54,6 +54,11 @@ fs.readdirSync('./commands/').forEach(dir => {
             // gonna let the cmds run
             try {
                 Client.commands.set(fileGet.help.name, fileGet);
+
+                // it search in the cmds folder if there is any aliases
+                fileGet.help.aliases.forEach(alias => {
+                    Client.aliases.set(alias, fileGet.help.name);
+                })
 
             } catch (err) {
               // catch err in console  
@@ -101,8 +106,9 @@ Client.on("message", async message => {
     let cmd = messageArray[0];
     let args = messageArray.slice(1)
 
-    // Making the command work if you say the command
-    let commands = Client.commands.get(cmd.slice(prefix.length))
+    // it will make the cmd work with him orginal name and his aliases
+    let commands = Client.commands.get(cmd.slice(prefix.length)) || Client.commands.get(Client.aliases.get(cmd.slice(prefix.length)));
+
     if(commands) commands.run(Client, message, args, prefix);
 
 
@@ -122,7 +128,7 @@ Client.on("message", async message => {
 
 
 Client.on("message" ,function(message) {
-    if(message.author.Client) return;
+    if(message.author.bot) return;
     var addXP = Math.floor(Math.random() * 10); //when i type addXP it will randomly choose a number between 1-10   [  Math.floor(Math.random() * 10)  ]
 // lvl 1 statics
     if(!xpfile[message.author.id]) {
