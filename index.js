@@ -7,9 +7,6 @@ const config = require('./config.json');
 // create a new Discord Client 
 const Client = new Discord.Client({disableEveryone: true});
 
-// we make a new system for the cmds
-Client.commands = new Discord.Collection();
-
 // require the fs module
 const fs = require('fs');
 
@@ -18,59 +15,6 @@ const xpfile = require('./xp.json');
 
 //define a prefix
 const prefix = ('=');
-
-
-
-
-
-
-// Command Handler
-
-// get into the cmds folder
-fs.readdirSync('./commands/').forEach(dir => {
-
-    //in the cmds folder, we gonna check for the category
-    fs.readdir(`./commands/${dir}`, (err, files) => {
-
-        // console log err (catch err)
-        if (err) throw err;
-
-         // checking if the files ends with .js if its a javascript file
-        var jsFiles = files.filter(f => f.split(".").pop() === "js");
-
-         // if there is no cmds in the file it will return
-        if (jsFiles.length <= 0) {
-          console.log("Can't find any commands!");
-          return;
-        }
-
-        
-        jsFiles.forEach(file => {
-
-            // console the loaded cmds 
-            var fileGet = require(`./commands/${dir}/${file}`);
-            console.log(`File ${file} was loaded`)
-
-            // gonna let the cmds run
-            try {
-                Client.commands.set(fileGet.help.name, fileGet);
-
-            } catch (err) {
-              // catch err in console  
-                return console.log(err);
-            }
-        });
-    });
-});
-
-
-
-
-
-
-
-
-
 
 
 
