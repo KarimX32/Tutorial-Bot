@@ -31,6 +31,19 @@ Client.on("ready", async () => {
 
 
 
+// Welcome message 
+
+Client.on("guildMemberAdd", member => {
+    const welcomeChannel = member.guild.channels.cache.find(channel => channel.name === 'CHANNEL NAME')
+    welcomeChannel.send (`welcome! ${member}`)
+})
+
+// Bye Message
+
+Client.on("guildMemberRemove", member => {
+    const welcomeChannel = member.guild.channels.cache.find(channel => channel.name === 'CHANNEL NAME')
+    welcomeChannel.send (`Goodbye! ${member}`)
+})
 
 
 
