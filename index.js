@@ -19,8 +19,23 @@ const xpfile = require('./xp.json');
 //define a prefix
 const prefix = ('=');
 
-// it creates a new function for our aliases
-Client.aliases = new Discord.Collection();
+
+
+// Welcome message 
+
+Client.on("guildMemberAdd", member => {
+    const welcomeChannel = member.guild.channels.cache.find(channel => channel.name === 'cool')
+    welcomeChannel.send (`welcome! ${member}`)
+})
+
+// Bye Message
+
+Client.on("guildMemberRemove", member => {
+    const welcomeChannel = member.guild.channels.cache.find(channel => channel.name === 'cool')
+    welcomeChannel.send (`Goodbye! ${member}`)
+})
+
+
 
 
 
@@ -54,11 +69,6 @@ fs.readdirSync('./commands/').forEach(dir => {
             // gonna let the cmds run
             try {
                 Client.commands.set(fileGet.help.name, fileGet);
-
-                // it search in the cmds folder if there is any aliases
-                fileGet.help.aliases.forEach(alias => {
-                    Client.aliases.set(alias, fileGet.help.name);
-                })
 
             } catch (err) {
               // catch err in console  
@@ -107,7 +117,7 @@ Client.on("message", async message => {
     let args = messageArray.slice(1)
 
     // it will make the cmd work with him orginal name and his aliases
-    let commands = Client.commands.get(cmd.slice(prefix.length)) || Client.commands.get(Client.aliases.get(cmd.slice(prefix.length)));
+    let commands = Client.commands.get(cmd.slice(prefix.length))
 
     if(commands) commands.run(Client, message, args, prefix);
 
