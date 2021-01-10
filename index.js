@@ -22,8 +22,6 @@ const prefix = ('=');
 // it creates a new function for our aliases
 Client.aliases = new Discord.Collection();
 
-const ms = require('ms');
-
 
 // Welcome message 
 
